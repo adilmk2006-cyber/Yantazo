@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
+import { viteSingleFile } from 'vite-plugin-singlefile';
 
 /**
  * Emits sw.js with the full list of built files, so the service worker can
@@ -24,7 +25,32 @@ function offlineServiceWorker(): Plugin {
   };
 }
 
-export default defineConfig({
+/**
+ * Standalone build (`npm run build:single`): one HTML file with every script,
+ * style and the favicon inlined, playable straight from disk. The manifest
+ * and service worker are left out — neither works from a lone file.
+ */
+function standaloneHtml(): Plugin {
+  return {
+    name: 'mindvault-standalone-html',
+    transformIndexHtml(html) {
+      const icon = readFileSync(new URL('./public/favicon.svg', import.meta.url));
+      return html
+        .replace(/\s*<link rel="manifest"[^>]*>/, '')
+        .replace('href="./favicon.svg"', `href="data:image/svg+xml;base64,${icon.toString('base64')}"`);
+    },
+  };
+}
+
+export default defineConfig(({ mode }) =>
+  mode === 'singlefile'
+    ? {
+        plugins: [react(), standaloneHtml(), viteSingleFile()],
+        base: './',
+        publicDir: false,
+        build: { target: 'es2022', outDir: 'dist-single', sourcemap: false },
+      }
+    : {
   plugins: [react(), offlineServiceWorker()],
   base: './',
   build: {
@@ -48,4 +74,5 @@ export default defineConfig({
     include: ['src/**/*.test.{ts,tsx}'],
     testTimeout: 60000,
   },
-});
+},
+);

@@ -25,6 +25,14 @@ npm run preview      # serves dist/ at http://localhost:4173
 
 `dist/` is a static site that uses relative paths and a hash router, so it can be hosted from any folder or static host.
 
+Single-file build:
+
+```bash
+npm run build:single # builds dist-single/index.html and copies it to mindvault.html
+```
+
+`mindvault.html` is the whole game in one self-contained file (about 780 KB, 250 KB gzipped): every script, style and the icon are inlined, and it makes no network requests. Open it straight from disk (`file://`) or send it to someone. Progress is saved in the browser's local storage for that file. It has no service worker or install manifest — it doesn't need them. A built copy is committed at the repo root; rebuild it after changing the game.
+
 Offline play: in a production build, a service worker precaches every built file on the first visit. After that the whole game works without a network, including the mysteries and puzzle generation. The dev server does not register the service worker.
 
 ## What's in the game
