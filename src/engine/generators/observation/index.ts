@@ -121,7 +121,7 @@ export const obsLocation: GeneratorDef = {
     const tName = describeGlyph(glyphFor(t), { orientation: false });
     const col = (c: number) => String.fromCharCode(65 + (c % n));
     const row = (c: number) => Math.floor(c / n) + 1;
-    const memorize = { blocks: [{ type: 'visual' as const, visual: fig(scene), size: 'md' as const }], exposureMs: 2000 + 900 * count, instruction: 'Memorise where each object is.' };
+    const memorize = { blocks: [{ type: 'visual' as const, visual: fig(scene), size: 'lg' as const }], exposureMs: 2000 + 900 * count, instruction: 'Memorise where each object is.' };
     if (ask === 'where') {
       const base: Visual = fig({ glyphs: [], lines: gridLines(n) });
       return {
@@ -168,7 +168,7 @@ export const obsLocation: GeneratorDef = {
     return {
       title: 'What was here?',
       prompt: 'Which object was in the outlined square?',
-      display: { memorize, blocks: [{ type: 'visual', visual: fig({ glyphs: [], lines: [...gridLines(n), ...highlightLines] }), size: 'md' }] },
+      display: { memorize, blocks: [{ type: 'visual', visual: fig({ glyphs: [], lines: [...gridLines(n), ...highlightLines] }), size: 'lg' }] },
       interaction: { type: 'choice', choices: built.choices, columns: 4 },
       answer: { type: 'choice', correct: built.correctId },
       hints: [`There were ${count} objects on a ${n}×${n} grid.`, `The outlined square is column ${col(t.cell)}, row ${row(t.cell)}.`, `The object there was ${SHADE_NAMES[t.shade]}.`],
@@ -250,7 +250,7 @@ export const obsDifference: GeneratorDef = {
     return {
       title: 'Spot the difference',
       prompt: `The right-hand scene differs from the left in ${k === 1 ? 'one place' : `${k} places`}. Click ${k === 1 ? 'the difference' : `all ${k} differences`} in the right-hand scene.`,
-      display: { blocks: [{ type: 'visual', visual: fig(base), size: 'md', caption: 'Original' }] },
+      display: { blocks: [{ type: 'visual', visual: fig(base), size: 'lg', caption: 'Original' }] },
       interaction: { type: 'glyphs', figure: shuffled, count: k },
       answer: { type: 'glyphs', indices: diff },
       hints: [
@@ -325,8 +325,8 @@ export const obsChange: GeneratorDef = {
       title: 'What changed?',
       prompt: 'Study the first scene. After it disappears, one thing will have changed. What was it?',
       display: {
-        memorize: { blocks: [{ type: 'visual', visual: fig(before), size: 'md' }], exposureMs: 2500 + 500 * n, instruction: 'Memorise this scene.' },
-        blocks: [{ type: 'visual', visual: fig(after), size: 'md', caption: 'The scene now' }],
+        memorize: { blocks: [{ type: 'visual', visual: fig(before), size: 'lg' }], exposureMs: 2500 + 500 * n, instruction: 'Memorise this scene.' },
+        blocks: [{ type: 'visual', visual: fig(after), size: 'lg', caption: 'The scene now' }],
       },
       interaction: { type: 'choice', choices: built.choices },
       answer: { type: 'choice', correct: built.correctId },

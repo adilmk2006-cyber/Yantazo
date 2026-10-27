@@ -183,7 +183,7 @@ export const spatialPath: GeneratorDef = {
       title: 'Follow the route',
       prompt: `A walker starts on the marked square, facing the direction of the arrow (north is up). ${compass} Follow the instructions in order, then click the square where the walker ends.`,
       display: {
-        blocks: [{ type: 'list', ordered: true, title: 'Instructions', items: steps.map((s) => stepText(s) + '.') }, ...(blockedList.length ? [{ type: 'text' as const, tone: 'note' as const, text: 'Dark squares are pillars; the route never passes through them.' }] : [])],
+        blocks: [{ type: 'list', ordered: true, title: 'Instructions', items: steps.map((s) => stepText(s) + '.') }, ...(blockedList.length ? [{ type: 'text' as const, tone: 'note' as const, text: 'Shaded squares are pillars; the route never passes through them.' }] : [])],
       },
       interaction: { type: 'cell', base, rows, cols },
       answer: { type: 'cell', index: end[1] * cols + end[0] },

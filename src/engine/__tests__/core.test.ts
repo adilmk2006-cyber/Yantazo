@@ -200,3 +200,55 @@ describe('authored content integrity', () => {
     expect(new Set(KB.map((o) => o.id)).size).toBe(KB.length);
   });
 });
+
+describe('answers cannot be found by surface cues', () => {
+  // A player should not be able to beat a generator by always picking the
+  // longest written option. Chance level is roughly 1 in 4.
+  it('the correct text option is not systematically the longest', () => {
+    for (const def of GENERATORS) {
+      let n = 0;
+      let longest = 0;
+      for (const d of [1, 2, 3, 4] as const) {
+        if ((def.minDifficulty ?? 1) > d) continue;
+        for (let i = 0; i < 25; i++) {
+          let p;
+          try {
+            p = buildPuzzle(def, `len${d}-${i}`, d);
+          } catch (e) {
+            if (e instanceof RejectCandidate) continue;
+            throw e;
+          }
+          const inter = p.interaction;
+          const choices = inter.type === 'choice' || inter.type === 'investigation' ? inter.choices : inter.type === 'text' || inter.type === 'number' ? inter.fallback : undefined;
+          if (!choices?.length || choices.some((c) => !c.text || c.visual)) continue;
+          const correctId = p.answer.type === 'choice' ? p.answer.correct : 'fallbackCorrect' in p.answer ? p.answer.fallbackCorrect : undefined;
+          const lens = choices.map((c) => c.text!.length);
+          const max = Math.max(...lens);
+          n++;
+          const right = choices.find((c) => c.id === correctId);
+          if (right && right.text!.length === max && lens.filter((l) => l === max).length === 1) longest++;
+        }
+      }
+      if (n >= 20) expect({ id: def.id, rate: longest / n < 0.45 }).toEqual({ id: def.id, rate: true });
+    }
+  });
+
+  it('matchstick options include true equations that need more than one move', () => {
+    const def = GENERATORS.find((g) => g.id === 'riddle.matchsticks')!;
+    let checked = 0;
+    for (let i = 0; i < 30; i++) {
+      let p;
+      try {
+        p = buildPuzzle(def, `ms-${i}`, 3);
+      } catch (e) {
+        if (e instanceof RejectCandidate) continue;
+        throw e;
+      }
+      if (p.interaction.type !== 'choice') continue;
+      const trueOptions = p.interaction.choices.filter((c) => c.visual?.kind === 'matchsticks' && evaluate(c.visual.text));
+      expect(trueOptions.length).toBeGreaterThanOrEqual(3);
+      checked++;
+    }
+    expect(checked).toBeGreaterThan(5);
+  });
+});

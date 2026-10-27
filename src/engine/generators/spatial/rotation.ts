@@ -31,7 +31,7 @@ const byId = (id: string) => T.find((t) => t.id === id)!;
 
 function vis(cells: Cell[]): Visual {
   const b = bounds(cells);
-  return { kind: 'cells', w: b.w, h: b.h, gridLines: true, layers: [{ cells, style: 'solid' }] };
+  return { kind: 'cells', w: b.w, h: b.h, frame: 4, gridLines: true, layers: [{ cells, style: 'solid' }] };
 }
 
 interface RotHidden {

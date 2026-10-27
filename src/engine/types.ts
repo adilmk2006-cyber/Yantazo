@@ -121,6 +121,8 @@ export type Visual =
       layers: CellLayer[];
       marks?: { x: number; y: number; text: string }[];
       gridLines?: boolean;
+      /** Draw inside a square frame at least this many cells wide, so options share one scale. */
+      frame?: number;
     }
   | {
       kind: 'paper';

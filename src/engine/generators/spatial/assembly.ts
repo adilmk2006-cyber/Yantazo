@@ -17,7 +17,7 @@ function fits(piece: Cell[], hole: Cell[]): boolean {
 
 function vis(cells: Cell[]): Visual {
   const b = bounds(cells);
-  return { kind: 'cells', w: b.w, h: b.h, gridLines: true, layers: [{ cells, style: 'accent' }] };
+  return { kind: 'cells', w: b.w, h: b.h, frame: 4, gridLines: true, layers: [{ cells, style: 'accent' }] };
 }
 
 interface AsmHidden {

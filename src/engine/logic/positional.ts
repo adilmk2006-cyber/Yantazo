@@ -36,6 +36,13 @@ interface ThemeText {
   question: string;
 }
 
+const LINE_TITLES: Record<string, string> = {
+  queue: 'The vault queue',
+  tower: 'Who lives where?',
+  race: 'Finishing order',
+  lockers: 'Locker row',
+};
+
 const LINE_THEMES: ThemeText[] = [
   {
     id: 'queue', geometry: 'line',
@@ -143,7 +150,7 @@ const WEEK_THEME: ThemeText = {
   justBefore: (a, b) => `${a} inspects the day before ${b}`,
   adjacent: (a, b) => `${a} and ${b} inspect on consecutive days`,
   notAdjacent: (a, b) => `${a} and ${b} do not inspect on consecutive days`,
-  gap: (a, b, g) => `exactly ${g === 1 ? 'one day' : `${g} days`} lie between ${a}'s and ${b}'s inspections`,
+  gap: (a, b, g) => `exactly ${g === 1 ? 'one day' : `${g} days`} ${g === 1 ? 'lies' : 'lie'} between ${a}'s and ${b}'s inspections`,
   gapAfter: (a, b, k) => `${b} inspects exactly ${k} days after ${a}`,
   free: (i) => `nobody inspects on ${DAYS[i]}`,
   elim: (a, s) => `${a} cannot inspect on ${listJoin(s, 'or')}`,
@@ -387,7 +394,7 @@ export function buildPositional(rng: Rng, difficulty: Difficulty, geometry: Geom
 
   const isWeek = geometry === 'week';
   return {
-    title: geometry === 'circle' ? 'Round-table seating' : isWeek ? 'Inspection schedule' : 'Order of events',
+    title: geometry === 'circle' ? 'Round-table seating' : isWeek ? 'Inspection schedule' : LINE_TITLES[theme.id] ?? 'Order of events',
     prompt: `${theme.intro(names, n, m)} Use the clues to work out the full arrangement. ${theme.question}`,
     display: { blocks: [{ type: 'list', ordered: true, title: 'Clues', items: clueTexts }] },
     interaction: isWeek
