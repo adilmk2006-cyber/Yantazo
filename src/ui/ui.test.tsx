@@ -4,6 +4,7 @@ import { act, cleanup, fireEvent, render, screen, within } from '@testing-librar
 import { GameProvider } from './GameContext';
 import { PuzzlePlayer } from './play/PuzzlePlayer';
 import App from '../App';
+import { ScreenBoundary } from './components/ScreenBoundary';
 import { GENERATORS } from '../engine/generators';
 import { buildPuzzle } from '../engine/registry';
 import type { Puzzle } from '../engine/types';
@@ -231,5 +232,28 @@ describe('app shell', () => {
     expect(await screen.findByRole('button', { name: /Submit answer|Compare with the solution/ }, { timeout: 5000 })).toBeTruthy();
     expect(screen.getByRole('button', { name: /Pause/ })).toBeTruthy();
     expect(screen.getByRole('button', { name: /Skip/ })).toBeTruthy();
+  });
+});
+
+describe('screen error boundary', () => {
+  it('shows a recoverable message instead of a blank app, and resets on navigation', () => {
+    const quiet = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const Broken = () => {
+      throw new Error('Failed to fetch dynamically imported module: /assets/x.js');
+    };
+    const { rerender } = render(
+      <ScreenBoundary routeKey="mysteries/x">
+        <Broken />
+      </ScreenBoundary>,
+    );
+    expect(screen.getByRole('alert').textContent).toMatch(/could not be loaded/);
+    expect(screen.getByRole('button', { name: 'Reload' })).toBeTruthy();
+    rerender(
+      <ScreenBoundary routeKey="">
+        <p>home again</p>
+      </ScreenBoundary>,
+    );
+    expect(screen.getByText('home again')).toBeTruthy();
+    quiet.mockRestore();
   });
 });

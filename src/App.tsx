@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect } from 'react';
 import { GameProvider, useGame } from './ui/GameContext';
 import { href, useRoute } from './ui/router';
+import { ScreenBoundary } from './ui/components/ScreenBoundary';
 import { Icon } from './ui/components/Icon';
 import { Home } from './ui/screens/Home';
 import { EndlessSetup } from './ui/screens/EndlessSetup';
@@ -109,7 +110,9 @@ function Shell() {
         </div>
       )}
       <main id="main" tabIndex={-1}>
-        <Suspense fallback={<div className="screen loading">Opening the case files…</div>}>{screen}</Suspense>
+        <ScreenBoundary routeKey={route.segments.join('/')}>
+          <Suspense fallback={<div className="screen loading">Opening the case files…</div>}>{screen}</Suspense>
+        </ScreenBoundary>
       </main>
       <div className="toasts" aria-live="polite" aria-atomic="false">
         {game.toasts.map((t) => (

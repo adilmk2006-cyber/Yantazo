@@ -21,6 +21,7 @@
   --pink: #ff8fb8;
   --blue: #7aa6ff;
   --teal: #5eead4;
+  --cat: var(--cyan);
   --shade-0: #5ad4e6;
   --shade-1: #6ee7a8;
   --shade-2: #b49cff;
@@ -595,7 +596,6 @@ main {
   gap: 14px;
 }
 .category-card {
-  --cat: var(--cyan);
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -662,7 +662,6 @@ main {
   margin: 10px 0;
 }
 .toggle-card {
-  --cat: var(--cyan);
   display: flex;
   gap: 10px;
   align-items: flex-start;
@@ -875,7 +874,6 @@ textarea {
   text-align: center;
 }
 .player {
-  --cat: var(--cyan);
   background: linear-gradient(180deg, var(--panel), var(--bg-2));
   border: 1px solid var(--line);
   border-top: 3px solid var(--cat);
@@ -914,7 +912,6 @@ textarea {
   align-items: center;
 }
 .cat-chip {
-  --cat: var(--cyan);
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -2109,7 +2106,6 @@ textarea {
   gap: 14px;
 }
 .stat-card {
-  --cat: var(--cyan);
   border-top: 3px solid var(--cat);
 }
 .stat-card h3 {
@@ -2146,10 +2142,16 @@ textarea {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 4px;
+  padding: 4px 2px;
   border-radius: 8px;
   background: var(--panel-ink);
   font-size: 0.85rem;
+  min-width: 0;
+}
+.diff-cell abbr {
+  text-decoration: none;
+  font-size: 0.7rem;
+  white-space: nowrap;
 }
 .sparkline {
   width: 100%;
@@ -2285,7 +2287,6 @@ textarea {
   gap: 10px;
 }
 .daily-item {
-  --cat: var(--cyan);
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -2657,4 +2658,8 @@ textarea {
 .player-title:focus-visible,
 main:focus-visible {
   box-shadow: none;
+}
+.daily-item .cat-chip,
+.history-list .cat-chip {
+  margin-right: 8px;
 }

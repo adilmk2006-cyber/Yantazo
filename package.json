@@ -4,6 +4,9 @@
   "version": "1.0.0",
   "description": "MINDVAULT — an endless, locally generated reasoning and puzzle game with a curated murder-mystery campaign.",
   "type": "module",
+  "engines": {
+    "node": ">=20.19"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

@@ -24,6 +24,8 @@ function Sparkline({ values }: { values: number[] }) {
   );
 }
 
+const TIER_SHORT: Record<Difficulty, string> = { 1: 'Init.', 2: 'Analyst', 3: 'Invest.', 4: 'Master' };
+
 export function Dashboard() {
   const { profile, cases, saved } = useGame();
   const lvl = levelFor(profile.xp);
@@ -119,7 +121,7 @@ export function Dashboard() {
               <div className="by-diff" aria-label="Accuracy by difficulty">
                 {([1, 2, 3, 4] as Difficulty[]).map((d) => (
                   <span key={d} className="diff-cell" title={DIFFICULTY_NAMES[d]}>
-                    <span className="muted small">{DIFFICULTY_NAMES[d].slice(0, 4)}</span> {pct(accuracy(s.byDifficulty[d]))}
+                    <abbr className="muted small" title={DIFFICULTY_NAMES[d]}>{TIER_SHORT[d]}</abbr> {pct(accuracy(s.byDifficulty[d]))}
                   </span>
                 ))}
               </div>
